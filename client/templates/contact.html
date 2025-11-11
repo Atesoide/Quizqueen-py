@@ -31,16 +31,17 @@
     }
   }
 </script>
-    <link rel="stylesheet" href="css/output.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="js/index_script.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/css/output.css')}}">
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='css/js/index_script.js')}}"></script>
     <link rel="icon" type="image/x-icon" href="">
     <meta charset="UTF-8">
 </head>
 <body>
     <div class="container">
         <div class="image">
-            <img class="mascot" src="sprites/pochita-spin.gif">
+            <img class="mascot" src="{{ url_for('static', filename='css/sprites/pochita-spin.gif')}}">
         </div>
         <div class="description">
             <p>Placeholder con la informacion de contacto para los desarrolladores</p>

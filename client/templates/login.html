@@ -33,7 +33,10 @@
      }
    }
  </script>
-     <link rel="stylesheet" href="/css/style.css">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/css/output.css')}}">
+     <!-- jQuery -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+     <script type="text/javascript" src="{{ url_for('static', filename='css/js/index_script.js')}}"></script>
      <link rel="icon" type="image/x-icon" href="/sprites/tab.png">
  </head>
  <body class="min-h-screen bg-gradient-to-br from-purple-900 to-blue-800 flex items-center justify-center p-4">
