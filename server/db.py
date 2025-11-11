@@ -1,12 +1,13 @@
 # server/db.py
 import mysql.connector
 from mysql.connector import errorcode
+import bcrypt
 
 # Configuración de la conexión MySQL
 db_config = {
     'user': 'root',
     'password': 'toor',
-    'host': 'localhost',
+    'host': '127.0.0.1',
     'database': 'quizqueen'
 }
 
@@ -15,31 +16,31 @@ def crear_tabla_usuarios():
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
         
-        # TABLA DE USUARIOS ACTUALIZADA CON EL CAMPO password_hash
+        # CORREGIDO: Usar los nombres de columnas correctos
         crear_tabla = """
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS usuarios (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            fname VARCHAR(50) NOT NULL,
-            lastname VARCHAR(50),
-            email VARCHAR(100) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL 
+            nombre VARCHAR(100) NOT NULL,
+            correo VARCHAR(100) NOT NULL UNIQUE,
+            contraseña VARCHAR(255) NOT NULL 
         )
         """
         cursor.execute(crear_tabla)
         cnx.commit()
         cursor.close()
         cnx.close()
-        print("Tabla 'users' creada o ya existe.")
+        print("Tabla 'usuarios' creada o ya existe.")
     except mysql.connector.Error as err:
         print("Error al crear la tabla:", err)
 
-# La función ahora acepta y guarda el hash de la contraseña
-def agregar_usuario(fname, email, password_hash): 
+# CORREGIDO: Usar los nombres de columnas correctos
+def agregar_usuario(nombre, correo, contraseña_hash): 
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
-        insertar_usuario = "INSERT INTO usuarios (nombre, correo, contraseña) VALUES (%s, %s,%s, %s)"
-        cursor.execute(insertar_usuario, (fname, email, password_hash))
+        # CORREGIDO: Los nombres de columnas deben coincidir con la tabla
+        insertar_usuario = "INSERT INTO usuarios (nombre, correo, contraseña) VALUES (%s, %s, %s)"
+        cursor.execute(insertar_usuario, (nombre, correo, contraseña_hash))
         cnx.commit()
         last_id = cursor.lastrowid # Obtener el ID del nuevo usuario
         cursor.close()
@@ -49,11 +50,12 @@ def agregar_usuario(fname, email, password_hash):
         print("Error al agregar usuario:", err)
         return None
 
-def obtener_usuario_por_email(email):
+def obtener_usuario_por_email(correo):
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        # CORREGIDO: Buscar en la tabla 'usuarios' no 'users'
+        cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
         usuario = cursor.fetchone()
         cursor.close()
         cnx.close()
@@ -66,7 +68,8 @@ def obtener_usuario_por_id(user_id):
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor(dictionary=True)
-        cursor.execute("SELECT id, fname, lastname, email FROM users WHERE id = %s", (user_id,))
+        # CORREGIDO: Buscar en la tabla 'usuarios' no 'users'
+        cursor.execute("SELECT id, nombre, correo FROM usuarios WHERE id = %s", (user_id,))
         usuario = cursor.fetchone()
         cursor.close()
         cnx.close()

@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash  # Added flash import
 from flask_bcrypt import Bcrypt
 from server.db import crear_tabla_usuarios, agregar_usuario, obtener_usuario_por_email, obtener_usuario_por_id
 
@@ -39,66 +39,73 @@ def contact():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    # Si el usuario ya está logueado, redirigir a Home Protegido (/)
-    if session.get('logged_in'):
-        return redirect(url_for('home'))
-
     if request.method == 'POST':
-        fname = request.form['fname']
-        lastname = request.form.get('lastname','')
-        email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['cpassword']
-
-        # 1. Validación de Confirmación
-        if password != confirm_password:
-            return render_template('signup.html', error="Error: Las contraseñas no coinciden.")
-
-        # 2. Cifrar la contraseña con Bcrypt
-        password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+        # Use .get() to avoid BadRequestKeyError
+        nombre = request.form.get('nombre', '').strip()
+        correo = request.form.get('correo', '').strip()
+        contraseña = request.form.get('contraseña', '')
+        confirm_password = request.form.get('confirmPassword', '')
         
-        # 3. Guardar el usuario en la DB
-        user_id = agregar_usuario(fname, lastname, email, password_hash)
+        # Validate required fields
+        if not nombre:
+            flash('Full name is required', 'error')
+            return render_template('signup.html')
         
+        if not correo:
+            flash('Email is required', 'error')
+            return render_template('signup.html')
+            
+        if not contraseña:
+            flash('Password is required', 'error')
+            return render_template('signup.html')
+        
+        # Check if passwords match
+        if contraseña != confirm_password:
+            flash('Passwords do not match', 'error')
+            return render_template('signup.html')
+        
+        # Check if user already exists
+        existing_user = obtener_usuario_por_email(correo)
+        if existing_user:
+            flash('Email already registered', 'error')
+            return render_template('signup.html')
+        
+        # FIXED: Use flask_bcrypt correctly
+        password_hash = bcrypt.generate_password_hash(contraseña).decode('utf-8')
+        
+        # Add user to database
+        user_id = agregar_usuario(nombre, correo, password_hash)
         if user_id:
-            # Registro exitoso: redirige al login
+            flash('Account created successfully! Please login.', 'success')
             return redirect(url_for('login'))
         else:
-            # Error de registro (ej. email duplicado)
-            return render_template('signup.html', error="Error al registrar usuario. El email ya existe.")
-            
-    # Muestra el formulario GET
+            flash('Error creating account. Please try again.', 'error')
+    
     return render_template('signup.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # Si el usuario ya está logueado, redirigir a Home Protegido (/)
-    if session.get('logged_in'):
-        return redirect(url_for('home'))
-
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        # Use .get() to avoid BadRequestKeyError
+        correo = request.form.get('correo', '').strip()
+        contraseña = request.form.get('contraseña', '')
         
-        usuario = obtener_usuario_por_email(email)
+        if not correo or not contraseña:
+            flash('Please fill in all fields', 'error')
+            return render_template('login.html')
         
-        if usuario:
-            # 1. Verificar la contraseña con Bcrypt
-            if bcrypt.check_password_hash(usuario['password'], password):
-                # 2. Éxito: Establecer la sesión de Flask
-                session['logged_in'] = True
-                session['user_id'] = usuario['id']
-                session['user_email'] = usuario['email']
-                
-                # 3. Redirigir al Home Protegido
-                return redirect(url_for('home'))
-            else:
-                return render_template('login.html', error="Contraseña o email incorrectos.")
+        # Get user from database
+        user = obtener_usuario_por_email(correo)
+        # FIXED: Use flask_bcrypt correctly
+        if user and bcrypt.check_password_hash(user['contraseña'], contraseña):
+            session['user_id'] = user['id']
+            session['user_name'] = user['nombre']
+            session['logged_in'] = True  # Added this missing session variable
+            flash('Login successful!', 'success')
+            return redirect(url_for('home'))  # Changed to 'home' route
         else:
-            return render_template('login.html', error="Contraseña o email incorrectos.")
-            
-    # Muestra el formulario GET
+            flash('Invalid email or password', 'error')
+    
     return render_template('login.html')
 
 @app.route('/logout')
@@ -140,3 +147,4 @@ def settings():
 # --- Inicio del Servidor ---
 if __name__ == '__main__':
     app.run(debug=True)
+
