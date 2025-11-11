@@ -5,7 +5,7 @@ from mysql.connector import errorcode
 # Configuración de la conexión MySQL
 db_config = {
     'user': 'root',
-    'password': 'alumno#204623',
+    'password': 'toor',
     'host': 'localhost',
     'database': 'quizqueen'
 }

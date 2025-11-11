@@ -4,52 +4,48 @@
 
 {% block content %}
 
-<article class="content-form">
-    <aside class="title-decor">
-        <h1>Contacto</h1>
-        <p class="message">Puedes contactarnos a través de este formulario.</p>
-    </aside>
-    <aside class="form">
-        <form class="form contact" action="/contact" method="POST" novalidate>
-            <div class="form-group">
-                <label for="nombre">Nombre:</label><br>
-                <input 
-                    type="text" 
-                    id="nombre" 
-                    name="nombre"
-                    placeholder="Tu nombre"
-                    autofocus
-                    aria-label="Nombre"
-                    >
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label><br>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email"
-                    placeholder="your@mail.com"
-                    required
-                    aria-label="Email"
-                    >
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Sobre Nosotros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          // Quiz-themed colors
+          'quiz-purple': '#706398',
+          'quiz-lightpurple': '#d2c7ef',
+          'quiz-darkpurple': '#454092',
+          'quiz-violet': '#ad8cdb',
+          'quiz-purpleindigo': '#776ac6',
+          
+          // Custom gradients
+          'quiz-gradient-from': '#706398',
+          'quiz-gradient-to': '#454092',
 
-            </div>
-
-            <div class="form-group">
-                <label for="mensaje">Mensaje:</label><br>
-                <textarea 
-                    id="mensaje" 
-                    name="mensaje" 
-                    rows="4" 
-                    cols="50">
-                </textarea>
-            </div>
-            <div class="form-actions">
-                <input  class="submit" type="submit" value="Enviar">
-            </div>
-        </form>
-    </aside>
-
-</article>
+        }
+      }
+    }
+  }
+</script>
+    <link rel="stylesheet" href="css/output.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/index_script.js"></script>
+    <link rel="icon" type="image/x-icon" href="">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="container">
+        <div class="image">
+            <img class="mascot" src="sprites/pochita-spin.gif">
+        </div>
+        <div class="description">
+            <p>Placeholder con la informacion de contacto para los desarrolladores</p>
+        </div>
+    </div>
+</body>
 
 {% endblock %}

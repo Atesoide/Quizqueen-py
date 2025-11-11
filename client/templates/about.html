@@ -3,8 +3,47 @@
 {% block title %}Nosotros{% endblock %}
 
 {% block content %}
-<article class="content">
-    <h1>Acerca de Nosotros</h1>
-    <p class="message">Información sobre nuestra empresa o proyecto.</p>
-</article>
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Sobre Nosotros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          // Quiz-themed colors
+          'quiz-purple': '#706398',
+          'quiz-lightpurple': '#d2c7ef',
+          'quiz-darkpurple': '#454092',
+          'quiz-violet': '#ad8cdb',
+          'quiz-purpleindigo': '#776ac6',
+          
+          // Custom gradients
+          'quiz-gradient-from': '#706398',
+          'quiz-gradient-to': '#454092',
+
+        }
+      }
+    }
+  }
+</script>
+    <link rel="stylesheet" href="css/output.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/index_script.js"></script>
+    <link rel="icon" type="image/x-icon" href="">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="container">
+        <div class="image">
+            <img class="mascot" src="sprites/pochita-spin.gif">
+        </div>
+        <div class="description">
+            <p>Placeholder de la descripcion</p>
+        </div>
+    </div>
+</body>
 {% endblock %}
