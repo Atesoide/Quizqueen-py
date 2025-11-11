@@ -1,0 +1,52 @@
+{% extends "navbar.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<!-- Formulario de inicio de sesión -->
+ <!-- Acomodar contenido--> 
+<article class="content-form">
+    <h1>Iniciar Sesión</h1>
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form class="form login" action="/login" method="POST" novalidate>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="your@mail.com"
+                required
+                autofocus
+                aria-label="Email"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Tu contraseña"
+                required
+                aria-label="Contraseña"
+            >
+        </div>
+
+        <div class="form-actions">
+            <input class="submit" type="submit" value="Entrar">
+        </div>
+
+        <div class="form-links">
+            <a href="/signup">¿No tienes cuenta? Crear cuenta</a>
+            &nbsp;|&nbsp;
+            <a href="/forgot-password">¿Olvidaste la contraseña?</a>
+        </div>
+    </form>
+</article>
+
+{% endblock %}

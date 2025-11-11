@@ -1,0 +1,55 @@
+{% extends "navbar.html" %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block content %}
+
+<article class="content-form">
+    <aside class="title-decor">
+        <h1>Contacto</h1>
+        <p class="message">Puedes contactarnos a través de este formulario.</p>
+    </aside>
+    <aside class="form">
+        <form class="form contact" action="/contact" method="POST" novalidate>
+            <div class="form-group">
+                <label for="nombre">Nombre:</label><br>
+                <input 
+                    type="text" 
+                    id="nombre" 
+                    name="nombre"
+                    placeholder="Tu nombre"
+                    autofocus
+                    aria-label="Nombre"
+                    >
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label><br>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email"
+                    placeholder="your@mail.com"
+                    required
+                    aria-label="Email"
+                    >
+
+            </div>
+
+            <div class="form-group">
+                <label for="mensaje">Mensaje:</label><br>
+                <textarea 
+                    id="mensaje" 
+                    name="mensaje" 
+                    rows="4" 
+                    cols="50">
+                </textarea>
+            </div>
+            <div class="form-actions">
+                <input  class="submit" type="submit" value="Enviar">
+            </div>
+        </form>
+    </aside>
+
+</article>
+
+{% endblock %}

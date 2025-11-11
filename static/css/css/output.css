@@ -1,0 +1,121 @@
+@import "tailwindcss";
+@font-face {
+  font-family: 'VHS Gothic';
+
+  src: url('VHSGothic.woff2') format('woff2'),
+        url('VHSGothic.woff') format('woff');
+
+  font-weight: normal;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@theme{
+  --color-*: initial;
+  --color-lightpurple: #d2c7ef ;
+  --color-darkpurple: #454092 ;
+  --color-purple: #706398 ;
+  --color-violet: #ad8cdb ;
+  --color-indigo: #776ac6 ;
+
+}
+
+body{
+  font-family: VHS Gothic;
+}
+
+.toHide{
+  display:none;
+}
+
+.topnav {
+  background-color: #d2c7ef;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+/* Style the links inside the navigation bar */
+
+.topnav a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  float: right;
+}
+
+/* Change the color of links on hover */
+
+.topnav a:hover {
+  background-color: grey;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+
+.topnav a.active {
+  background-color: #454092;
+}
+
+.profile-pic{
+  float: left;
+  height: 25vh;
+}
+
+.mascot{
+  height: 25vh;
+}
+
+.answered-quizes{
+  text-align: center;
+}
+
+.description{
+  float: right;
+}
+
+.container{
+  padding: 10%;
+}
+
+.user{
+  float: left;
+}
+
+/* Health Bar Styles */
+.health-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.health-bar {
+  width: 200px;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.health-bar-fill {
+  height: 100%;
+  width: 100%;
+  background-color: #4CAF50;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.health-text {
+  font-weight: bold;
+  min-width: 40px;
+  text-align: right;
+}
+
+.answer{
+  width: 15vw;
+}

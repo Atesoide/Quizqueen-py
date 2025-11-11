@@ -1,0 +1,45 @@
+{% extends "navbar.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block head %}
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          // Quiz-themed colors
+          'quiz-purple': '#706398',
+          'quiz-lightpurple': '#d2c7ef',
+          'quiz-darkpurple': '#454092',
+          'quiz-violet': '#ad8cdb',
+          'quiz-purpleindigo': '#776ac6',
+          
+          // Custom gradients
+          'quiz-gradient-from': '#706398',
+          'quiz-gradient-to': '#454092',
+        }
+      }
+    }
+  }
+</script>
+<!-- CSS personalizado -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/css/output.css')}}">
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Script personalizado -->
+<script type="text/javascript" src="{{ url_for('static', filename='css/js/index_script.js')}}"></script>
+
+
+<div class="container">
+    <div id="typewriter-box"></div>
+    <div class="buttons">
+        <a href="selector" class="skip-button">SKIP</a>
+    </div>
+</div>
+{% endblock %}
