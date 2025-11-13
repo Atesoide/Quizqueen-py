@@ -61,11 +61,6 @@ def login_required(f):
 
 @app.route('/')
 def home():
-    if session.get('logged_in'):
-        user_id = session.get('user_id')
-        user_data = obtener_usuario_por_id(user_id)
-        return render_template('auth/home.html', user=user_data)
-    else:
         return render_template('index.html')
 
 @app.route('/about')

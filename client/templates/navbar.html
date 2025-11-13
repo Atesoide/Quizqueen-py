@@ -67,9 +67,6 @@
         <a href="{{ url_for('about') }}">Sobre nosotros</a>
         <a href="{{ url_for('contact') }}">Contacto</a>
         <a href="{{ url_for('leaderboards') }}">Mejores puntuaciones</a>
-        <a id="profile" href="{{ url_for('profile') }}">
-            {% if session.logged_in %}Perfil{% else %}Perfil (Placeholder){% endif %}
-        </a>
         <a href="{{ url_for('suggestions') }}">¿Tienes una sugerencia?</a>
     </div>
     <hr>
