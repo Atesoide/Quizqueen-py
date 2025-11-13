@@ -8,7 +8,8 @@ db_config = {
     'user': 'root',
     'password': 'toor',
     'host': '127.0.0.1',
-    'database': 'quizqueen'
+    'database': 'quizqueen',
+    'auth_plugin': 'mysql_native_password'  # Add this line
 }
 
 def crear_tabla_usuarios():
@@ -22,7 +23,7 @@ def crear_tabla_usuarios():
             id INT AUTO_INCREMENT PRIMARY KEY,
             nombre VARCHAR(100) NOT NULL,
             correo VARCHAR(100) NOT NULL UNIQUE,
-            contraseña VARCHAR(255) NOT NULL 
+            password VARCHAR(255) NOT NULL 
         )
         """
         cursor.execute(crear_tabla)
@@ -34,13 +35,13 @@ def crear_tabla_usuarios():
         print("Error al crear la tabla:", err)
 
 # CORREGIDO: Usar los nombres de columnas correctos
-def agregar_usuario(nombre, correo, contraseña_hash): 
+def agregar_usuario(nombre, correo, password_hash): 
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
         # CORREGIDO: Los nombres de columnas deben coincidir con la tabla
-        insertar_usuario = "INSERT INTO usuarios (nombre, correo, contraseña) VALUES (%s, %s, %s)"
-        cursor.execute(insertar_usuario, (nombre, correo, contraseña_hash))
+        insertar_usuario = "INSERT INTO usuarios (nombre, correo, password) VALUES (%s, %s, %s)"
+        cursor.execute(insertar_usuario, (nombre, correo, password_hash))
         cnx.commit()
         last_id = cursor.lastrowid # Obtener el ID del nuevo usuario
         cursor.close()

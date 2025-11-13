@@ -14,21 +14,24 @@ CREATE TABLE  `usuarios` (
 	`id` INT AUTO_INCREMENT PRIMARY KEY,
     `nombre` varchar(50) NOT NULL,
     `correo` varchar(50) NOT NULL unique,
-    `contraseña` varchar(100) NOT NULL,
+    `password` varchar(100) NOT NULL,
     `rango`int(5),
     `puntuacion` int(20)
 );
+
+
 
 ALTER TABLE usuarios
 ADD CONSTRAINT chk_email_format CHECK (
     correo REGEXP '^[a-zA-Z0-9][a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$'
 );
 
+
 SELECT * FROM usuarios;
 --
 -- Dumping data for table `cuestionario_prueba`
 --
-INSERT INTO `usuarios` (nombre, correo, contraseña, rango, puntuacion) VALUES
+INSERT INTO `usuarios` (nombre, correo, password, rango, puntuacion) VALUES
 ('Atesoide', 'sample@gmail.com', '1234', '1', '100');
 INSERT INTO `cuestionario_prueba` (`id`, `pregunta`, `respuesta_1`, `respuesta_2`, `respuesta_3`, `respuesta_4`, `respuesta_correcta`) VALUES
 (1, '¿Cuál color se obtiene al mezclar rojo y azul? ', 'Verde ', 'Amarillo', 'Morado', 'Fucsia', 3),
