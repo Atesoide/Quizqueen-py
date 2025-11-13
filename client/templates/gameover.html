@@ -1,0 +1,98 @@
+{% extends "navbar.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="/sprites/tab.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Over</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          // Quiz-themed colors
+          'quiz-purple': '#706398',
+          'quiz-lightpurple': '#d2c7ef',
+          'quiz-darkpurple': '#454092',
+          'quiz-violet': '#ad8cdb',
+          'quiz-purpleindigo': '#776ac6',
+          
+          // Custom gradients
+          'quiz-gradient-from': '#706398',
+          'quiz-gradient-to': '#454092',
+
+        }
+      }
+    }
+  }
+</script>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+<body>
+    <div class="content-container" id="main-content">
+        <div class="results-container">
+            <h1 class="game-over">Game Over</h1>
+            <div id="results-display">
+                <p>Loading results...</p>
+            </div>
+            <p id="give-up">Don't give up just yet!!</p>
+            <div class="retry-buttons">
+                <a href="#" class="retry-btn retry-quiz-link">RETRY</a>
+                <a href="/" class="retry-btn">CHANGE QUIZ</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const results = JSON.parse(sessionStorage.getItem('quizResults') || '{}');
+        const quizTable = '<%= quizTable %>';
+        const effectiveQuizTable = results.quizTable || quizTable;
+        
+        function showGameOverSequence() {
+            const mainContent = document.getElementById('main-content');
+            const z = getRandomInt(10);
+            
+            setTimeout(() => {
+                gif.style.display = 'none';
+                mainContent.classList.add('content-visible');
+                
+                if(z == 9){
+                    document.getElementById("give-up").textContent = "gettttttt dunked onnnnnnnnnnnn";
+                } else {
+                }
+            }, 3000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const retryLinks = document.querySelectorAll('.retry-quiz-link');
+            retryLinks.forEach(link => {
+                link.href = `/quiz?quiz=${encodeURIComponent(effectiveQuizTable)}&difficulty=${results.difficulty || 1}`;
+            });
+            
+            if (results.correct !== undefined) {
+                const percentage = Math.round((results.correct / results.total) * 100);
+                document.getElementById('results-display').innerHTML = `
+                    <p class="gameoveranswers">Correct Answers: ${results.correct}/${results.total}</p>
+                    <p class="percentage">Score: ${percentage}%</p>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+            }
+            
+            showGameOverSequence();
+        });
+        
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

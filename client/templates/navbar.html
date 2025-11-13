@@ -35,23 +35,49 @@
 
 <body>
     <div class="topnav">
-        <a href="/">Introduccion</a>
-        <a href="selector">Selecciona tu cuestionario</a>
-        <a href="about">Sobre nosotros</a>
-        <a href="contact">Contacto</a>
-        <a href="leaderboards">Mejores puntuaciones</a>
-        <a id="profile" href="profile">Perfil (Placeholder)</a>
-        <a href="suggestions">¿Tienes una sugerencia?</a>
+        <!-- User Section - Dynamic based on login status -->
+        <div class="user-section" style="float: right; margin-right: 20px;">
+            {% if session.logged_in %}
+                <!-- Show when user is logged in -->
+                <div class="user-info" style="display: inline-block; margin-right: 15px;">
+                    <span style="color: white; margin-right: 10px;">Welcome, {{ session.user_name }}</span>
+                    <a href="{{ url_for('logout') }}" class="logout-btn" 
+                       style="color: white; text-decoration: none; padding: 5px 10px; border: 1px solid white; border-radius: 4px;">
+                       Logout
+                    </a>
+                </div>
+            {% else %}
+                <!-- Show when user is not logged in -->
+                <div class="auth-buttons" style="display: inline-block;">
+                    <a href="{{ url_for('login') }}" 
+                       style="color: white; text-decoration: none; margin-right: 10px; padding: 5px 10px; border: 1px solid white; border-radius: 4px;">
+                       Login
+                    </a>
+                    <a href="{{ url_for('signup') }}" 
+                       style="color: white; text-decoration: none; padding: 5px 10px; border: 1px solid white; border-radius: 4px;">
+                       Sign Up
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Regular Navigation Links -->
+        <a href="{{ url_for('home') }}">Introduccion</a>
+        <a href="{{ url_for('selector') }}">Selecciona tu cuestionario</a>
+        <a href="{{ url_for('about') }}">Sobre nosotros</a>
+        <a href="{{ url_for('contact') }}">Contacto</a>
+        <a href="{{ url_for('leaderboards') }}">Mejores puntuaciones</a>
+        <a id="profile" href="{{ url_for('profile') }}">
+            {% if session.logged_in %}Perfil{% else %}Perfil (Placeholder){% endif %}
+        </a>
+        <a href="{{ url_for('suggestions') }}">¿Tienes una sugerencia?</a>
     </div>
     <hr>
     <div class="content">
         {% block content %}{% endblock %}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM1M7uV2gTTJcI"
         crossorigin="anonymous"></script>
-
-
 </body>
-
 </html>

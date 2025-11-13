@@ -1,0 +1,108 @@
+{% extends "navbar.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Show</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // Quiz-themed colors
+            'quiz-purple': '#706398',
+            'quiz-lightpurple': '#d2c7ef',
+            'quiz-darkpurple': '#454092',
+            'quiz-violet': '#ad8cdb',
+            'quiz-purpleindigo': '#776ac6',
+            
+            // Custom gradients
+            'quiz-gradient-from': '#706398',
+            'quiz-gradient-to': '#454092',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='sprites/tab.png') }}">
+  <meta charset="UTF-8">
+  <script>
+    // CONFIG FROM SERVER - CONVERTED TO JINJA2
+    const QUIZ_CONFIG = {
+        table: '{{ quiz_table }}',
+        difficulty: {{ difficulty }},
+        health: {{ health }},
+        length: {{ length }}
+    };
+    console.log("Quiz Config Loaded:", QUIZ_CONFIG);
+  </script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+  <div class="quiz min-h-screen bg-gradient-to-br from-quiz-purple to-quiz-darkpurple p-4">
+    <div class="health-container">
+      <p class="health">Vida:</p>
+      <div class="health-bar">
+        <div id="health-bar" class="health-bar-fill"></div>
+      </div>
+      <span id="health-text" class="health-text"></span>
+      <p class="quiz-progress">Progreso: <span id="quiz-progress"></span></p>
+    </div>
+    
+    <!-- Question Table (for debugging) -->
+    {{ question_table|safe }}
+    
+    <div id="quizContainer" class="float-right items-center justify-center max-h-screen p-64">
+      <div class="top-section">
+        <p id="question"></p>
+      </div>
+      <div class="answers-container bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-4xl w-full border border-white/20 shadow-2xl">
+        <div class="answers grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="div1 p-5">
+            <button id="a1" class="answer items-center justify-center bg-green-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105" onclick="answerQuestion('a1')">Answer 1</button>
+          </div>
+          <div class="div2 p-5">
+            <button id="a2" class="answer items-center justify-center bg-green-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105" onclick="answerQuestion('a2')">Answer 2</button>
+          </div>
+          <div class="div3 p-5">
+            <button id="a3" class="answer items-center justify-center bg-green-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105" onclick="answerQuestion('a3')">Answer 3</button>
+          </div>
+          <div class="div4 p-5">
+            <button id="a4" class="answer items-center justify-center bg-green-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105" onclick="answerQuestion('a4')">Answer 4</button>
+          </div>
+        </div>
+      </div>
+      <a class="change-button items-center justify-center bg-red-500 hover:bg-red-900 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 p-64" href="{{ url_for('selector') }}">Cambiar cuestionario</a>
+    </div>
+  </div>
+  
+  <script>
+    // Store quiz table in sessionStorage immediately - CONVERTED TO JINJA2
+    sessionStorage.setItem("quiz", "{{ quiz_table }}");
+    sessionStorage.setItem("quizDifficulty", "{{ difficulty }}");
+
+    // Start music after user interaction
+    document.addEventListener('DOMContentLoaded', function() {
+      document.body.addEventListener('click', function initMusic() {
+        const difficultyLevel = {{ difficulty }};
+        const musicId = ['easy-song', 'normal-song', 'hard-song'][difficultyLevel - 1];
+        const audio = document.getElementById(musicId);
+        if (audio) {
+          audio.play().catch(e => console.log('Audio play failed:', e));
+        }
+      }, { once: true });
+    });
+  </script>
+</body>
+</html>
+
+{% endblock %}

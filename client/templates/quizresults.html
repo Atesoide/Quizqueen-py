@@ -1,0 +1,97 @@
+{% extends "navbar.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          // Quiz-themed colors
+          'quiz-purple': '#706398',
+          'quiz-lightpurple': '#d2c7ef',
+          'quiz-darkpurple': '#454092',
+          'quiz-violet': '#ad8cdb',
+          'quiz-purpleindigo': '#776ac6',
+          
+          // Custom gradients
+          'quiz-gradient-from': '#706398',
+          'quiz-gradient-to': '#454092',
+
+        }
+      }
+    }
+  }
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body>
+    <div class="results-container">
+        <h1 class="game-over">YOU WON!</h1>
+        <div id="results-display">
+            <!-- Results will be displayed here by JavaScript -->
+        </div>
+        <a href="selector" class="retry-btn">Take Another Quiz</a>
+    </div>
+
+    <script>
+        // Retrieve results from session storage
+        const results = JSON.parse(sessionStorage.getItem('quizResults'));
+        
+        if (results) {
+            const percentage = Math.round((results.correct / results.total) * 100);
+
+            if(percentage == 100){
+                document.getElementById('results-display').innerHTML = `
+                <p class="gameoveranswers">Correct Answers: ${results.correct}/${results.total}</p>
+                <p class="percentage">Score: ${percentage}%</p>
+                <p id="give-up">You got a perfect score! Congratulations!</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: ${percentage}%"></div>
+                </div>
+                `;
+            }
+            else if(percentage < 100 && percentage >=61){
+                document.getElementById('results-display').innerHTML = `
+                <p class="gameoveranswers">Correct Answers: ${results.correct}/${results.total}</p>
+                <p class="percentage">Score: ${percentage}%</p>
+                <p id="give-up">You did incredible darling! Keep it up!</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: ${percentage}%"></div>
+                </div>
+                `;
+            }
+            else{
+                document.getElementById('results-display').innerHTML = `
+                <p class="gameoveranswers">Correct Answers: ${results.correct}/${results.total}</p>
+                <p class="percentage">Score: ${percentage}%</p>
+                <p id="give-up">You could definitely use some improvement</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: ${percentage}%"></div>
+                </div>
+                `;
+            }
+            
+            // Clear the stored results
+            sessionStorage.removeItem('quizResults');
+        } else {
+            document.getElementById('results-display').innerHTML = `
+                <p class="gameoveranswers">No results found.</p>
+                <p class="gameoveranswers">Please complete a quiz first.</p>
+            `;
+        }
+    </script>
+</body>
+</html>
+
+{% endblock %}
