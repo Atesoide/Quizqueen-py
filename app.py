@@ -2,13 +2,14 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_bcrypt import Bcrypt
 import mysql.connector
-from server.db import crear_tabla_usuarios, agregar_usuario, obtener_usuario_por_email, obtener_usuario_por_id
+from server.db import crear_tabla_sugerencias, agregar_sugerencia, obtener_sugerencias_por_usuario, crear_tabla_usuarios, agregar_usuario, obtener_usuario_por_email, obtener_usuario_por_id
 
 # --- Configuración Inicial ---
 app = Flask(__name__, template_folder='client/templates')
 app.secret_key = os.environ.get('SECRET_KEY', 'una_clave_de_desarrollo_insegura') 
 bcrypt = Bcrypt(app)
 crear_tabla_usuarios()
+crear_tabla_sugerencias()
 
 # Database configuration
 db_config = {
@@ -291,10 +292,69 @@ def profile():
     user_data = obtener_usuario_por_id(user_id)
     return render_template('profile.html', user=user_data)
 
-@app.route('/suggestions')
+@app.route('/suggestions', methods=['GET', 'POST'])
 @login_required
 def suggestions():
-    return render_template('suggestions.html')
+    from server.db import agregar_sugerencia, obtener_sugerencias_por_usuario
+    
+    if request.method == 'POST':
+        user_id = session.get('user_id')
+        suggestion_type = request.form.get('suggestion_type')
+        
+        if suggestion_type == 'question':
+            # Handle single question suggestion
+            pregunta = request.form.get('pregunta', '').strip()
+            respuesta_1 = request.form.get('respuesta_1', '').strip()
+            respuesta_2 = request.form.get('respuesta_2', '').strip()
+            respuesta_3 = request.form.get('respuesta_3', '').strip()
+            respuesta_4 = request.form.get('respuesta_4', '').strip()
+            respuesta_correcta = request.form.get('respuesta_correcta')
+            descripcion = request.form.get('descripcion_pregunta', '').strip()
+            
+            if not pregunta or not all([respuesta_1, respuesta_2, respuesta_3, respuesta_4]) or not respuesta_correcta:
+                flash('Please fill all required fields for the question', 'error')
+                return render_template('suggestions.html')
+            
+            sugerencia_id = agregar_sugerencia(
+                user_id=user_id,
+                tipo='pregunta',
+                pregunta=pregunta,
+                respuesta_1=respuesta_1,
+                respuesta_2=respuesta_2,
+                respuesta_3=respuesta_3,
+                respuesta_4=respuesta_4,
+                respuesta_correcta=int(respuesta_correcta),
+                descripcion=descripcion
+            )
+            
+        elif suggestion_type == 'quiz':
+            # Handle entire quiz suggestion
+            titulo = request.form.get('quiz_title', '').strip()
+            descripcion = request.form.get('quiz_description', '').strip()
+            
+            if not titulo:
+                flash('Quiz title is required', 'error')
+                return render_template('suggestions.html')
+            
+            sugerencia_id = agregar_sugerencia(
+                user_id=user_id,
+                tipo='cuestionario',
+                titulo=titulo,
+                descripcion=descripcion
+            )
+        
+        if sugerencia_id:
+            flash('Thank you for your suggestion! We will review it soon.', 'success')
+        else:
+            flash('Error submitting suggestion. Please try again.', 'error')
+        
+        return redirect(url_for('suggestions'))
+    
+    # GET request - show the form and user's previous suggestions
+    user_id = session.get('user_id')
+    user_suggestions = obtener_sugerencias_por_usuario(user_id)
+    
+    return render_template('suggestions.html', suggestions=user_suggestions)
 
 @app.route('/game_over')
 @login_required
