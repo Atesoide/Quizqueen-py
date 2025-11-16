@@ -35,81 +35,81 @@
             <!-- Question Suggestion Form -->
             <form id="questionForm" method="POST" class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-8 border border-white/20 hidden">
                 <input type="hidden" name="suggestion_type" value="question">
-                <h3 class="text-xl font-bold text-white mb-4">Suggest a Question</h3>
+                <h3 class="text-xl font-bold text-white mb-4">Sugiere una pregunta</h3>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-white text-sm font-medium mb-2">Question *</label>
-                        <textarea name="pregunta" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your question..." rows="3"></textarea>
+                        <label class="block text-white text-sm font-medium mb-2">Pregunta *</label>
+                        <textarea name="pregunta" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingresa tu pregunta..." rows="3"></textarea>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-white text-sm font-medium mb-2">Answer 1 *</label>
-                            <input type="text" name="respuesta_1" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="First answer option">
+                            <label class="block text-white text-sm font-medium mb-2">Respuesta 1 *</label>
+                            <input type="text" name="respuesta_1" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Primera opcion">
                         </div>
                         <div>
-                            <label class="block text-white text-sm font-medium mb-2">Answer 2 *</label>
-                            <input type="text" name="respuesta_2" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Second answer option">
+                            <label class="block text-white text-sm font-medium mb-2">Respuesta 2 *</label>
+                            <input type="text" name="respuesta_2" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Segunda opcion">
                         </div>
                         <div>
-                            <label class="block text-white text-sm font-medium mb-2">Answer 3 *</label>
-                            <input type="text" name="respuesta_3" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Third answer option">
+                            <label class="block text-white text-sm font-medium mb-2">Respuesta 3 *</label>
+                            <input type="text" name="respuesta_3" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tercera opcion">
                         </div>
                         <div>
-                            <label class="block text-white text-sm font-medium mb-2">Answer 4 *</label>
-                            <input type="text" name="respuesta_4" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Fourth answer option">
+                            <label class="block text-white text-sm font-medium mb-2">Respuesta 4 *</label>
+                            <input type="text" name="respuesta_4" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Cuarta opcion">
                         </div>
                     </div>
                     
                     <div>
-                        <label class="block text-white text-sm font-medium mb-2">Correct Answer *</label>
+                        <label class="block text-white text-sm font-medium mb-2">Respuesta correcta *</label>
                         <select name="respuesta_correcta" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Select correct answer</option>
-                            <option value="1">Answer 1</option>
-                            <option value="2">Answer 2</option>
-                            <option value="3">Answer 3</option>
-                            <option value="4">Answer 4</option>
+                            <option value="">Respuesta correcta</option>
+                            <option value="1">Respuesta 1</option>
+                            <option value="2">Respuesta 2</option>
+                            <option value="3">Respuesta 3</option>
+                            <option value="4">Respuesta 4</option>
                         </select>
                     </div>
                     
                     <div>
-                        <label class="block text-white text-sm font-medium mb-2">Additional Notes (Optional)</label>
-                        <textarea name="descripcion_pregunta" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Any additional context or notes..." rows="2"></textarea>
+                        <label class="block text-white text-sm font-medium mb-2">Notas adicionales (Opcional)</label>
+                        <textarea name="descripcion_pregunta" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Algun contexto adicional" rows="2"></textarea>
                     </div>
                 </div>
                 
                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 mt-6">
-                    Submit Question Suggestion
+                    Sube tu sugerencia de pregunta
                 </button>
             </form>
 
             <!-- Quiz Suggestion Form -->
             <form id="quizForm" method="POST" class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-8 border border-white/20 hidden">
                 <input type="hidden" name="suggestion_type" value="quiz">
-                <h3 class="text-xl font-bold text-white mb-4">Suggest an Entire Quiz</h3>
+                <h3 class="text-xl font-bold text-white mb-4">Sugiere un quiz</h3>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-white text-sm font-medium mb-2">Quiz Title *</label>
-                        <input type="text" name="quiz_title" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Science Trivia, History Challenge...">
+                        <label class="block text-white text-sm font-medium mb-2">Titulo del cuestionario *</label>
+                        <input type="text" name="quiz_title" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Ejemplo: Ciencia, trivia, historia, conocimiento general, etc...">
                     </div>
                     
                     <div>
-                        <label class="block text-white text-sm font-medium mb-2">Quiz Description *</label>
-                        <textarea name="quiz_description" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Describe the theme, topics, and what makes this quiz interesting..." rows="4"></textarea>
+                        <label class="block text-white text-sm font-medium mb-2">Descripcion del cuestionario *</label>
+                        <textarea name="quiz_description" required class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Describe el tema y lo que lo hace interesante" rows="4"></textarea>
                     </div>
                 </div>
                 
                 <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 mt-6">
-                    Submit Quiz Suggestion
+                    Subir Sugerencia de cuestionario
                 </button>
             </form>
 
             <!-- User's Previous Suggestions -->
             {% if suggestions %}
             <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <h3 class="text-2xl font-bold text-white mb-4">Your Previous Suggestions</h3>
+                <h3 class="text-2xl font-bold text-white mb-4">Tus sugerencias previas</h3>
                 <div class="space-y-4">
                     {% for suggestion in suggestions %}
                     <div class="bg-white/5 rounded-lg p-4 border border-white/10">
