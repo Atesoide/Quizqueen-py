@@ -1,0 +1,42 @@
+{% extends "navbar.html" %}
+
+{% block title %}Error{% endblock %}
+
+{% block head %}
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          // Quiz-themed colors
+          'quiz-purple': '#706398',
+          'quiz-lightpurple': '#d2c7ef',
+          'quiz-darkpurple': '#454092',
+          'quiz-violet': '#ad8cdb',
+          'quiz-purpleindigo': '#776ac6',
+          
+          // Custom gradients
+          'quiz-gradient-from': '#706398',
+          'quiz-gradient-to': '#454092',
+        }
+      }
+    }
+  }
+</script>
+<!-- CSS personalizado -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/output.css')}}">
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<body style="background-color: black;" >
+    <div class="justify-center align-center flex">
+        <img src="{{ url_for('static', filename='sprites/404.gif')}}">
+        <p class="color-white">Tu no deberias estar aqui</p>
+    </div>
+    
+</body>
+{% endblock %}
