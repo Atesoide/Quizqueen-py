@@ -94,14 +94,21 @@ function replaceQuestion() {
 function answerQuestion(buttonId) {
     const isCorrect = parseInt(buttonId.replace("a", "")) === correctAnswer;
     
+    // Remove any existing pulse classes
+    document.getElementById('pulse-overlay').classList.remove('pulse-correct', 'pulse-incorrect');
+    
+    // Force a reflow to ensure the animation restarts
+    void document.getElementById('pulse-overlay').offsetWidth;
+    
     if (isCorrect) {
         correctResponses++;
-        // Visual feedback for correct answer
-        document.getElementById(buttonId).classList.add('bg-green-600');
+        // Green pulse for correct answer
+        document.getElementById('pulse-overlay').classList.add('pulse-correct');
     } else {
         bajarVida();
-        // Visual feedback for wrong answer
-        document.getElementById(buttonId).classList.add('bg-red-600');
+        // Red pulse for incorrect answer
+        document.getElementById('pulse-overlay').classList.add('pulse-incorrect');
+        
     }
     
     currentQuestion++;
@@ -116,7 +123,10 @@ function answerQuestion(buttonId) {
     if (currentQuestion >= maxQuestions) {
         endQuiz('quiz_results');
     } else {
-        replaceQuestion();
+        // Wait for the pulse animation to complete before loading next question
+        setTimeout(() => {
+            replaceQuestion();
+        }, 600); // Match this with your animation duration
     }
 }
 
