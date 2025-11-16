@@ -34,10 +34,15 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='sprites/tab.png') }}">
     <meta charset="UTF-8">
     <script>
-        // Set difficulty and store it persistently
         function setDifficulty(difficulty) {
+            // Convert to number to be safe
+            difficulty = parseInt(difficulty);
+            
             localStorage.setItem("quizDifficulty", difficulty);
             sessionStorage.setItem("quizDifficulty", difficulty);
+            
+            console.log("Difficulty set to:", difficulty, "Type:", typeof difficulty);
+            
             updateDifficultyDisplay(difficulty);
         }
         
@@ -89,7 +94,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {% if tables and tables|length > 0 %}
                         {% for table_name in tables %}
-                            <a href="{{ url_for('quiz') }}?quiz={{ table_name }}" class="quiz-option bg-blue-500 hover:bg-blue-600 text-white text-center font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 block">
+                            <a href="{{ url_for('quiz') }}?quiz={{ table_name }}&difficulty={{ session.get('quiz_difficulty', 1) }}" 
+                            class="quiz-option bg-blue-500 hover:bg-blue-600 text-white text-center font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 block">
                                 Quiz {{ table_name.replace('cuestionario_', '').capitalize() }}
                             </a>
                         {% endfor %}

@@ -7,54 +7,27 @@
         1
     );
     
+    // Store the actual difficulty number for later use
+    window.currentDifficulty = difficulty; // ADD THIS LINE
+    
     // Apply settings
     switch(difficulty) {
         case 1: 
             window.quizSettings = { health: 15, length: 5 };
-            playDifficultyMusic('easy-song');
-            changeSprite('easySprite');
             break;
         case 2: 
             window.quizSettings = { health: 30, length: 10 };
-            playDifficultyMusic('normal-song');
-            changeSprite('normalSprite');
             break;
         case 3: 
             window.quizSettings = { health: 45, length: 15 };
-            playDifficultyMusic('hard-song');
-            changeSprite('hardSprite');
             break;
         default: 
             window.quizSettings = { health: 15, length: 5 };
-            playDifficultyMusic('easy-song');
     }
     
     console.log("Difficulty initialized:", difficulty, window.quizSettings);
 })();
 
-// New function to handle music playback
-function playDifficultyMusic(id) {
-    // Wait for DOM to be fully ready
-    document.addEventListener('DOMContentLoaded', () => {
-        const audio = document.getElementById(id);
-        if (!audio) {
-            console.error("Audio element not found:", id);
-            return;
-        }
-    });
-} 
-
-function changeSprite(id) {
-    // Wait for DOM to be fully ready
-    document.addEventListener('DOMContentLoaded', () => {
-        const sprite = document.getElementById(id);
-        if (!sprite) {
-            console.error("Sprite element not found:", id);
-            return;
-        }
-        sprite.style.display ="";
-    });
-} 
 
 var health = window.quizSettings.health;
 var quizLength = window.quizSettings.length;
@@ -71,8 +44,6 @@ document.addEventListener("DOMContentLoaded", function() {
         length: quizLength
     });
     
-    x = document.getElementById("hurt-sound");
-    y = document.getElementById("correct-sound");
     table = document.getElementById("questionTable");
     
     // Initialize health display
@@ -102,7 +73,7 @@ function bajarVida() {
     updateHealthDisplay();
     document.getElementById("quiz-progress").textContent = correctResponses + "/" + currentQuestion;
     
-    if (health <= 0) endQuiz('game_over');
+    if (health <= 0) endQuiz('quiz_results');
 }
 
 function replaceQuestion() {
@@ -149,12 +120,19 @@ function answerQuestion(buttonId) {
     }
 }
 
-// MODIFIED: Updated endQuiz function to submit scores
+// SIMPLIFIED: Updated endQuiz function using the stored difficulty
 function endQuiz(resultsPage) {
     // Get quiz table from sessionStorage OR URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const quizTable = sessionStorage.getItem("quiz") || urlParams.get('quiz') || 'cuestionario_un';
-    const difficulty = sessionStorage.getItem("quizDifficulty") || 1;
+    
+    // Use the stored difficulty from initialization
+    const difficulty = window.currentDifficulty || 
+                      sessionStorage.getItem("quizDifficulty") || 
+                      localStorage.getItem("quizDifficulty") || 
+                      1;
+    
+    console.log("Ending quiz with difficulty:", difficulty, "stored as:", window.currentDifficulty);
     
     // Store results in sessionStorage
     sessionStorage.setItem('quizResults', JSON.stringify({
@@ -177,6 +155,7 @@ function endQuiz(resultsPage) {
             window.location.href = `${resultsPage}?quiz=${encodeURIComponent(quizTable)}&difficulty=${difficulty}&correct=${correctResponses}&total=${quizLength}&health=${health}`;
         });
 }
+
 
 // NEW: Function to submit score to leaderboard
 function submitScoreToLeaderboard(quizName, difficulty, correctAnswers, totalQuestions, remainingHealth) {
@@ -222,6 +201,6 @@ function handleGameOver() {
 }
 
 // Call handleGameOver if we're on the game over page
-if (window.location.pathname.includes('game_over')) {
+if (window.location.pathname.includes('quiz_results')) {
     document.addEventListener('DOMContentLoaded', handleGameOver);
 }
