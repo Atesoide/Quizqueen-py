@@ -68,10 +68,6 @@ def home():
 def about():
     return render_template('about.html')
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
 # --- Rutas de Autenticación ---
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -312,7 +308,7 @@ def suggestions():
             descripcion = request.form.get('descripcion_pregunta', '').strip()
             
             if not pregunta or not all([respuesta_1, respuesta_2, respuesta_3, respuesta_4]) or not respuesta_correcta:
-                flash('Please fill all required fields for the question', 'error')
+                flash('Por favor llena todas las areas de las respuestas', 'error')
                 return render_template('suggestions.html')
             
             sugerencia_id = agregar_sugerencia(
@@ -333,7 +329,7 @@ def suggestions():
             descripcion = request.form.get('quiz_description', '').strip()
             
             if not titulo:
-                flash('Quiz title is required', 'error')
+                flash('Se requiere titulo de cuestionario', 'error')
                 return render_template('suggestions.html')
             
             sugerencia_id = agregar_sugerencia(
@@ -344,9 +340,9 @@ def suggestions():
             )
         
         if sugerencia_id:
-            flash('Thank you for your suggestion! We will review it soon.', 'success')
+            flash('Gracias por tu sugerencia, la revisaremos pronto', 'success')
         else:
-            flash('Error submitting suggestion. Please try again.', 'error')
+            flash('Error al subir sugerencia, por favor intenta de nuevo', 'error')
         
         return redirect(url_for('suggestions'))
     
