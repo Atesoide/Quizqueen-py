@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_bcrypt import Bcrypt
 import mysql.connector
-from server.db import crear_tabla_sugerencias, agregar_sugerencia, obtener_sugerencias_por_usuario, crear_tabla_usuarios, agregar_usuario, obtener_usuario_por_email, obtener_usuario_por_id
+from server.db import crear_tabla_leaderboard, obtener_mejor_puntuacion_usuario, obtener_leaderboard_top, agregar_resultado_leaderboard, crear_tabla_sugerencias, agregar_sugerencia, obtener_sugerencias_por_usuario, crear_tabla_usuarios, agregar_usuario, obtener_usuario_por_email, obtener_usuario_por_id
 
 # --- Configuración Inicial ---
 app = Flask(__name__, template_folder='client/templates')
@@ -10,6 +10,7 @@ app.secret_key = os.environ.get('SECRET_KEY', 'una_clave_de_desarrollo_insegura'
 bcrypt = Bcrypt(app)
 crear_tabla_usuarios()
 crear_tabla_sugerencias()
+crear_tabla_leaderboard()
 
 # Database configuration
 db_config = {
@@ -275,15 +276,78 @@ def quiz():
         print('Error loading quiz:', error)
         return f'Error loading quiz: {error}', 500
 
-@app.route('/quiz_results')
+@app.route('/quiz_results', methods=['GET', 'POST'])
 @login_required
 def quiz_results():
-    return render_template('quizresults.html')
+    from server.db import agregar_resultado_leaderboard
+    
+    if request.method == 'POST':
+        # Get quiz results from the form
+        quiz_name = request.form.get('quiz_name')
+        difficulty = int(request.form.get('difficulty', 1))
+        correct_answers = int(request.form.get('correct_answers', 0))
+        total_questions = int(request.form.get('total_questions', 0))
+        remaining_health = int(request.form.get('remaining_health', 0))
+        
+        user_id = session.get('user_id')
+        
+        # Save to leaderboard
+        resultado_id = agregar_resultado_leaderboard(
+            user_id=user_id,
+            quiz_name=quiz_name,
+            difficulty=difficulty,
+            correct_answers=correct_answers,
+            total_questions=total_questions,
+            remaining_health=remaining_health
+        )
+        
+        if resultado_id:
+            flash('Your score has been saved to the leaderboard!', 'success')
+        else:
+            flash('Error saving your score.', 'error')
+        
+        return redirect(url_for('leaderboards'))
+    
+    # If GET request, just show the results page
+    return render_template('quizresults.html')  
 
 @app.route('/leaderboards')
 @login_required
 def leaderboards():
-    return render_template('leaderboard.html')
+    from server.db import obtener_leaderboard_top, obtener_mejor_puntuacion_usuario
+    
+    # Get filter parameters
+    quiz_filter = request.args.get('quiz', '')
+    difficulty_filter = request.args.get('difficulty', '')
+    
+    # Convert difficulty to int if provided
+    difficulty = int(difficulty_filter) if difficulty_filter.isdigit() else None
+    
+    # Get top scores
+    top_scores = obtener_leaderboard_top(
+        limit=50, 
+        quiz_filter=quiz_filter if quiz_filter else None,
+        difficulty_filter=difficulty
+    )
+    
+    # Get available quizzes for filter
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SHOW TABLES LIKE 'cuestionario_%'")
+    available_quizzes = [row[0] for row in cursor.fetchall()]
+    cursor.close()
+    conn.close()
+    
+    # Get user's personal best
+    user_id = session.get('user_id')
+    user_stats = obtener_mejor_puntuacion_usuario(user_id)
+    
+    return render_template('leaderboard.html', 
+                         top_scores=top_scores or [],
+                         available_quizzes=available_quizzes,
+                         current_quiz_filter=quiz_filter,
+                         current_difficulty_filter=difficulty_filter,
+                         user_stats=user_stats)
 
 @app.route('/profile')
 @login_required
@@ -408,7 +472,33 @@ def test_db():
 
 # --- API Routes for Quiz Functionality ---
 
-
+@app.route('/api/submit_score', methods=['POST'])
+@login_required
+def submit_score():
+    from server.db import agregar_resultado_leaderboard
+    
+    data = request.get_json()
+    
+    user_id = session.get('user_id')
+    quiz_name = data.get('quiz_name')
+    difficulty = data.get('difficulty', 1)
+    correct_answers = data.get('correct_answers', 0)
+    total_questions = data.get('total_questions', 0)
+    remaining_health = data.get('remaining_health', 0)
+    
+    resultado_id = agregar_resultado_leaderboard(
+        user_id=user_id,
+        quiz_name=quiz_name,
+        difficulty=difficulty,
+        correct_answers=correct_answers,
+        total_questions=total_questions,
+        remaining_health=remaining_health
+    )
+    
+    if resultado_id:
+        return jsonify({'success': True, 'message': 'Score saved!'})
+    else:
+        return jsonify({'success': False, 'message': 'Error saving score'}), 500
 
 @app.route('/api/questions/<quiz_table>')
 @login_required

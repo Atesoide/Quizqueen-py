@@ -1,6 +1,6 @@
 {% extends "navbar.html" %}
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block title %}Cuestionario{% endblock %}
 
 {% block content %}
 
@@ -61,11 +61,11 @@
     <!-- Question Table (for debugging) -->
     {{ question_table|safe }}
     
-    <div id="quizContainer" class="float-right items-center justify-center max-h-screen p-64">
+    <div id="quizContainer" class="float-right items-center justify-center max-h-screen p-32">
       <div class="top-section">
         <p id="question"></p>
       </div>
-      <div class="answers-container bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-4xl w-full border border-white/20 shadow-2xl">
+      <div class="answers-container bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-4xl w-full border border-white/20 shadow-2xl ">
         <div class="answers grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="div1 p-5">
             <button id="a1" class="answer items-center justify-center bg-green-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105" onclick="answerQuestion('a1')">Answer 1</button>
@@ -81,7 +81,9 @@
           </div>
         </div>
       </div>
-      <a class="change-button items-center justify-center bg-red-500 hover:bg-red-900 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 p-64" href="{{ url_for('selector') }}">Cambiar cuestionario</a>
+      <div class="p-10">
+        <a class="change-button items-center justify-center bg-red-500 hover:bg-red-900 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 " href="{{ url_for('selector') }}">Cambiar cuestionario</a>
+      </div>
     </div>
   </div>
   

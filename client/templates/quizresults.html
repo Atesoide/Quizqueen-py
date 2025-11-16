@@ -1,97 +1,75 @@
 {% extends "navbar.html" %}
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block title %}Game Over - Quiz App{% endblock %}
 
 {% block content %}
-
-
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Results</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          // Quiz-themed colors
-          'quiz-purple': '#706398',
-          'quiz-lightpurple': '#d2c7ef',
-          'quiz-darkpurple': '#454092',
-          'quiz-violet': '#ad8cdb',
-          'quiz-purpleindigo': '#776ac6',
-          
-          // Custom gradients
-          'quiz-gradient-from': '#706398',
-          'quiz-gradient-to': '#454092',
-
-        }
-      }
-    }
-  }
-</script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-</head>
-<body>
-    <div class="results-container">
-        <h1 class="game-over">YOU WON!</h1>
-        <div id="results-display">
-            <!-- Results will be displayed here by JavaScript -->
-        </div>
-        <a href="selector" class="retry-btn">Take Another Quiz</a>
-    </div>
-
-    <script>
-        // Retrieve results from session storage
-        const results = JSON.parse(sessionStorage.getItem('quizResults'));
+<div class="min-h-screen bg-gradient-to-br from-quiz-purple to-quiz-darkpurple flex items-center justify-center p-4">
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-md w-full border border-white/20 shadow-2xl text-center">
+        <h1 class="text-4xl font-bold text-white mb-6">Game Over!</h1>
         
-        if (results) {
-            const percentage = Math.round((results.correct / results.total) * 100);
+        <div class="space-y-4 mb-6">
+            <div class="text-2xl text-white">
+                Score: <span class="font-bold">{{ request.args.get('correct', 0) }}/{{ request.args.get('total', 0) }}</span>
+            </div>
+            <div class="text-lg text-white/80">
+                Health Remaining: <span class="font-bold">{{ request.args.get('health', 0) }}</span>
+            </div>
+            <div class="text-lg text-white/80">
+                Difficulty: <span class="font-bold">
+                    {% if request.args.get('difficulty') == '0' %}Easy
+                    {% elif request.args.get('difficulty') == '1' %}Normal
+                    {% else %}Hard{% endif %}
+                </span>
+            </div>
+        </div>
 
-            if(percentage == 100){
-                document.getElementById('results-display').innerHTML = `
-                <p class="gameoveranswers">Correct Answers: ${results.correct}/${results.total}</p>
-                <p class="percentage">Score: ${percentage}%</p>
-                <p id="give-up">You got a perfect score! Congratulations!</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: ${percentage}%"></div>
-                </div>
-                `;
-            }
-            else if(percentage < 100 && percentage >=61){
-                document.getElementById('results-display').innerHTML = `
-                <p class="gameoveranswers">Correct Answers: ${results.correct}/${results.total}</p>
-                <p class="percentage">Score: ${percentage}%</p>
-                <p id="give-up">You did incredible darling! Keep it up!</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: ${percentage}%"></div>
-                </div>
-                `;
-            }
-            else{
-                document.getElementById('results-display').innerHTML = `
-                <p class="gameoveranswers">Correct Answers: ${results.correct}/${results.total}</p>
-                <p class="percentage">Score: ${percentage}%</p>
-                <p id="give-up">You could definitely use some improvement</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: ${percentage}%"></div>
-                </div>
-                `;
-            }
-            
-            // Clear the stored results
-            sessionStorage.removeItem('quizResults');
-        } else {
-            document.getElementById('results-display').innerHTML = `
-                <p class="gameoveranswers">No results found.</p>
-                <p class="gameoveranswers">Please complete a quiz first.</p>
-            `;
+        <div class="space-y-4">
+            <a href="{{ url_for('quiz_results') }}" 
+               class="block w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+               View Detailed Results
+            </a>
+            <a href="{{ url_for('selector') }}" 
+               class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+               Play Another Quiz
+            </a>
+            <a href="{{ url_for('leaderboards') }}" 
+               class="block w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+               View Leaderboards
+            </a>
+            <a href="{{ url_for('home') }}" 
+               class="block w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+               Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-submit results if they came from game end
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const correct = urlParams.get('correct');
+        const total = urlParams.get('total');
+        const health = urlParams.get('health');
+        const quiz = urlParams.get('quiz');
+        const difficulty = urlParams.get('difficulty');
+
+        if (correct && total && health && quiz) {
+            // Submit score to leaderboard
+            fetch('/api/submit_score', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    quiz_name: quiz,
+                    difficulty: difficulty || 1,
+                    correct_answers: parseInt(correct),
+                    total_questions: parseInt(total),
+                    remaining_health: parseInt(health)
+                })
+            });
         }
-    </script>
-</body>
-</html>
-
+    });
+</script>
 {% endblock %}

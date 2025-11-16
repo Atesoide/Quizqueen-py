@@ -158,3 +158,134 @@ def obtener_sugerencias_por_usuario(user_id):
     except mysql.connector.Error as err:
         print("Error al obtener sugerencias:", err)
         return None
+    
+    # Add these functions to your db.py
+
+def crear_tabla_leaderboard():
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+        
+        crear_tabla = """
+        CREATE TABLE IF NOT EXISTS leaderboard (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT,
+            quiz_name VARCHAR(100) NOT NULL,
+            difficulty INT NOT NULL,
+            correct_answers INT NOT NULL,
+            total_questions INT NOT NULL,
+            score INT NOT NULL,
+            remaining_health INT NOT NULL,
+            completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+            INDEX idx_score (score DESC),
+            INDEX idx_user_id (user_id),
+            INDEX idx_quiz_difficulty (quiz_name, difficulty)
+        )
+        """
+        cursor.execute(crear_tabla)
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        print("Tabla 'leaderboard' creada o ya existe.")
+    except mysql.connector.Error as err:
+        print("Error al crear la tabla leaderboard:", err)
+
+def agregar_resultado_leaderboard(user_id, quiz_name, difficulty, correct_answers, total_questions, remaining_health):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+        
+        # Calculate score (you can adjust this formula)
+        base_score = correct_answers * 100
+        difficulty_multiplier = difficulty  # 1, 2, or 3
+        health_bonus = remaining_health * 10
+        
+        score = (base_score * difficulty_multiplier) + health_bonus
+        
+        insertar_resultado = """
+        INSERT INTO leaderboard 
+        (user_id, quiz_name, difficulty, correct_answers, total_questions, score, remaining_health)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """
+        
+        cursor.execute(insertar_resultado, (
+            user_id, quiz_name, difficulty, correct_answers, 
+            total_questions, score, remaining_health
+        ))
+        
+        cnx.commit()
+        last_id = cursor.lastrowid
+        cursor.close()
+        cnx.close()
+        return last_id
+    except mysql.connector.Error as err:
+        print("Error al agregar resultado al leaderboard:", err)
+        return None
+
+def obtener_leaderboard_top(limit=50, quiz_filter=None, difficulty_filter=None):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor(dictionary=True)
+        
+        query = """
+        SELECT 
+            lb.score,
+            lb.quiz_name,
+            lb.difficulty,
+            lb.correct_answers,
+            lb.total_questions,
+            lb.remaining_health,
+            lb.completed_at,
+            u.nombre as user_name
+        FROM leaderboard lb
+        JOIN usuarios u ON lb.user_id = u.id
+        """
+        
+        conditions = []
+        params = []
+        
+        if quiz_filter:
+            conditions.append("lb.quiz_name = %s")
+            params.append(quiz_filter)
+        
+        if difficulty_filter:
+            conditions.append("lb.difficulty = %s")
+            params.append(difficulty_filter)
+        
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        
+        query += " ORDER BY lb.score DESC LIMIT %s"
+        params.append(limit)
+        
+        cursor.execute(query, params)
+        resultados = cursor.fetchall()
+        cursor.close()
+        cnx.close()
+        return resultados
+    except mysql.connector.Error as err:
+        print("Error al obtener leaderboard:", err)
+        return None
+
+def obtener_mejor_puntuacion_usuario(user_id):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor(dictionary=True)
+        
+        cursor.execute("""
+            SELECT 
+                MAX(score) as best_score,
+                COUNT(*) as games_played,
+                AVG(score) as average_score
+            FROM leaderboard 
+            WHERE user_id = %s
+        """, (user_id,))
+        
+        stats = cursor.fetchone()
+        cursor.close()
+        cnx.close()
+        return stats
+    except mysql.connector.Error as err:
+        print("Error al obtener estadísticas del usuario:", err)
+        return None
