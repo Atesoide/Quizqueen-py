@@ -5,20 +5,20 @@
 {% block content %}
 <div class="min-h-screen bg-gradient-to-br from-quiz-purple to-quiz-darkpurple flex items-center justify-center p-4">
     <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-md w-full border border-white/20 shadow-2xl text-center">
-        <h1 class="text-4xl font-bold text-white mb-6">Game Over!</h1>
+        <h1 class="text-4xl font-bold text-white mb-6">Terminado!</h1>
         
         <div class="space-y-4 mb-6">
             <div class="text-2xl text-white">
-                Score: <span class="font-bold">{{ request.args.get('correct', 0) }}/{{ request.args.get('total', 0) }}</span>
+                Puntuacion: <span class="font-bold">{{ request.args.get('correct', 0) }}/{{ request.args.get('total', 0) }}</span>
             </div>
             <div class="text-lg text-white/80">
-                Health Remaining: <span class="font-bold">{{ request.args.get('health', 0) }}</span>
+                Vida restante: <span class="font-bold">{{ request.args.get('health', 0) }}</span>
             </div>
             <div class="text-lg text-white/80">
-                Difficulty: <span class="font-bold">
-                    {% if request.args.get('difficulty') == '1' %}Easy
+                Dificultad: <span class="font-bold">
+                    {% if request.args.get('difficulty') == '1' %}Facil
                     {% elif request.args.get('difficulty') == '2' %}Normal
-                    {% elif request.args.get('difficulty') == '3' %}Hard
+                    {% elif request.args.get('difficulty') == '3' %}Dificil
                     {% else %}Unknown ({{ request.args.get('difficulty', 'Not set') }}){% endif %}
                 </span>
             </div>
@@ -27,19 +27,19 @@
         <div class="space-y-4">
             <a href="{{ url_for('quiz_results') }}" 
                class="block w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-               View Detailed Results
+               Ver resultados detallados
             </a>
             <a href="{{ url_for('selector') }}" 
                class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-               Play Another Quiz
+               Jugar otro cuestionario
             </a>
             <a href="{{ url_for('leaderboards') }}" 
                class="block w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-               View Leaderboards
+               Ver tableros
             </a>
             <a href="{{ url_for('home') }}" 
                class="block w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-               Back to Home
+               Regresar al inicio
             </a>
         </div>
     </div>
