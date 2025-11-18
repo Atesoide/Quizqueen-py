@@ -6,7 +6,7 @@ import bcrypt
 # Configuración de la conexión MySQL
 db_config = {
     'user': 'root',
-    'password': 'toor',
+    'password': 'alumno#204623',
     'host': '127.0.0.1',
     'database': 'quizqueen',
     'auth_plugin': 'mysql_native_password'  # Add this line
