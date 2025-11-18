@@ -1,11 +1,9 @@
 $(document).ready(function() {
     const messages = [
-        "* BIENVENIDO A MI JUEGO, AMOR",
-        "* EN ESTE JUEGO, VAMOS A PROBAR TU CONOCIMIENTO SOBRE UNA VARIEDAD DE TEMAS!",
-        "* SIMPLEMENTE ESCOGES UNA DIFICULTAD ANTES DE SELECCIONAR TU CUESTIONARIO, Y EMPIEZAS A CONTESTAR LAS PREGUNTAS!",
-        "* PERO NO COMETAS MUCHOS ERRORES, POR QUE SI FALLAS MUCHAS PREGUNTAS...",
-        "* MORIRAS!!!",
-        "* ENTONCES, ¿COMENZAMOS?"
+        "¿Estás listo para poner a prueba tus conocimientos en una divertida trivia?",
+        "Selecciona una dificultad y comienza a jugar",
+        "Recuerda no comenter demasiados erroes, podrías quedarte sin oportunidades para responder",
+        "Buena suerte!"
     ];
     
     let currentMessage = 0;
