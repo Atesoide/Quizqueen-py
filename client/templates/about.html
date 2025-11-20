@@ -3,21 +3,17 @@
 {% block title %}Nosotros{% endblock %}
 
 {% block head %}
-<!-- Tailwind CSS CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
     theme: {
       extend: {
         colors: {
-          // Quiz-themed colors
           'quiz-purple': '#706398',
           'quiz-lightpurple': '#d2c7ef',
           'quiz-darkpurple': '#454092',
           'quiz-violet': '#ad8cdb',
           'quiz-purpleindigo': '#776ac6',
-          
-          // Custom gradients
           'quiz-gradient-from': '#706398',
           'quiz-gradient-to': '#454092',
         }
@@ -25,29 +21,36 @@
     }
   }
 </script>
-<!-- CSS personalizado -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css')}}">
-<!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 {% endblock %}
 
 {% block content %}
 <div class="min-h-screen bg-gradient-to-br from-quiz-purple to-quiz-darkpurple flex items-center justify-center p-4">
-    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-4xl w-full border border-white/20 shadow-2xl">
-        <div class="text-center">
-            <h1 class="text-4xl font-bold text-white mb-6">Sobre Nosotros</h1>
-            <p class="text-lg text-white/90 leading-relaxed">
-                Somos un par de estudiantes que queriamos probar un sistema de cuestionarios que pudiera ponerte a prueba en comparacion a otras personas. Si disfrutas los juegos de trivia, danos una oportunidad a nosotros, pon a prueba tus conocimientos sobre diversas categorías y comparalo con otros jugadores
-            </p>
-            <br>
-            <h1 class="text-4xl font-bold text-white mb-6">Contacto</h1>
-            <p class="text-lg text-white/90 leading-relaxed">
-                Si te gustaria ponerte en contacto, lo puedes hacer a travez de nuestro correo electronico.
-            </p>
-            <br>
-            <p class="text-lg text-white/90 leading-relaxed">
-                al191440@alumnos.uacj.mx
-            </p>
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-6xl w-full border border-white/20 shadow-2xl">
+        <div class="flex flex-col lg:flex-row gap-8 items-center">
+            <!-- Mascota sin fade-in -->
+            <div class="flex-shrink-0">
+                <img src="{{ url_for('static', filename='sprites/tortugaSelecciona.png') }}" 
+                     alt="Mascota Nosotros" 
+                     class="w-48 h-48 lg:w-64 lg:h-64 object-contain">
+            </div>
+            
+            <!-- Contenido -->
+            <div class="flex-grow text-center lg:text-left">
+                <h1 class="text-4xl font-bold text-white mb-6">Sobre Nosotros</h1>
+                <p class="text-lg text-white/90 leading-relaxed mb-6">
+                    Somos un par de estudiantes que queríamos probar un sistema de cuestionarios que pudiera ponerte a prueba en comparación a otras personas. Si disfrutas los juegos de trivia, danos una oportunidad a nosotros, pon a prueba tus conocimientos sobre diversas categorías y compáralo con otros jugadores.
+                </p>
+                
+                <h2 class="text-3xl font-bold text-white mb-4">Contacto</h2>
+                <p class="text-lg text-white/90 leading-relaxed mb-4">
+                    Si te gustaría ponerte en contacto, lo puedes hacer a través de nuestro correo electrónico.
+                </p>
+                <p class="text-lg text-white font-semibold">
+                    al191440@alumnos.uacj.mx
+                </p>
+            </div>
         </div>
     </div>
 </div>

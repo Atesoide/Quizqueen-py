@@ -1,13 +1,25 @@
 $(document).ready(function() {
     const messages = [
-        "¿Estás listo para poner a prueba tus conocimientos en una divertida trivia?",
-        "Selecciona una dificultad y comienza a jugar",
-        "Recuerda no comenter demasiados erroes, podrías quedarte sin oportunidades para responder",
-        "Buena suerte!"
+        {
+            text: "¿Estás listo para poner a prueba tus conocimientos en una divertida trivia?",
+            mascota: "tortugaIntro_1.png"
+        },
+        {
+            text: "Selecciona una dificultad y comienza a jugar",
+            mascota: "tortugaIntro_2.png"
+        },
+        {
+            text: "Recuerda no cometer demasiados errores, podrías quedarte sin oportunidades para responder",
+            mascota: "tortugaIntro_1.png"
+        },
+        {
+            text: "¡Buena suerte!",
+            mascota: "tortugaIntro_2.png"
+        }
     ];
     
     let currentMessage = 0;
-    let typingTimeout; // To track the typing timeout
+    let typingTimeout;
     const typewriterBox = $("#typewriter-box");
     const skipButton = $('a[class="skip-button"]');
     
@@ -16,7 +28,6 @@ $(document).ready(function() {
     
     // Click handler to cycle through messages
     typewriterBox.on("click", function() {
-        // Immediately stop current typing and go to next message
         clearTimeout(typingTimeout);
         goToNextMessage();
     });
@@ -27,18 +38,21 @@ $(document).ready(function() {
         window.location.href = "selector";
     });
     
-    function startTypingEffect(text) {
+    function startTypingEffect(messageObj) {
         typewriterBox.empty();
+        
+        // Cambiar la mascota
+        cambiarMascotaIntro(messageObj.mascota);
+        
         let i = 0;
+        const text = messageObj.text;
         
         function type() {
             if (i < text.length) {
                 typewriterBox.append(text.charAt(i));
-                
                 i++;
                 typingTimeout = setTimeout(type, 30);
             } else {
-                // If this was the last message, redirect after delay
                 if (currentMessage === messages.length - 1) {
                     setTimeout(function() {
                         window.location.href = "selector";
@@ -56,7 +70,6 @@ $(document).ready(function() {
         if (currentMessage < messages.length) {
             startTypingEffect(messages[currentMessage]);
         } else {
-            // If we've gone past the last message, redirect immediately
             window.location.href = "selector";
         }
     }

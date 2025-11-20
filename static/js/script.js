@@ -97,17 +97,22 @@ function answerQuestion(buttonId) {
     // Remove any existing pulse classes
     document.getElementById('pulse-overlay').classList.remove('pulse-correct', 'pulse-incorrect');
     
-    // Force a reflow to ensure the animation restarts
+    // Force a reflow
     void document.getElementById('pulse-overlay').offsetWidth;
     
     if (isCorrect) {
         correctResponses++;
         // Green pulse for correct answer
         document.getElementById('pulse-overlay').classList.add('pulse-correct');
+        // Cambiar mascota a correcta
+        cambiarMascotaQuiz(true);
+        
     } else {
         bajarVida();
         // Red pulse for incorrect answer
         document.getElementById('pulse-overlay').classList.add('pulse-incorrect');
+        // Cambiar mascota a incorrecta
+        cambiarMascotaQuiz(false);
         
     }
     
@@ -123,10 +128,9 @@ function answerQuestion(buttonId) {
     if (currentQuestion >= maxQuestions) {
         endQuiz('quiz_results');
     } else {
-        // Wait for the pulse animation to complete before loading next question
         setTimeout(() => {
             replaceQuestion();
-        }, 600); // Match this with your animation duration
+        }, 600);
     }
 }
 
